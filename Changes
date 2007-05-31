@@ -1,0 +1,16 @@
+Revision history for HTML-Tiny
+
+0.1 2007-05-30
+    Initial release.
+
+0.2 2007-05-30
+    More examples.
+    More documentation.
+    json_encode now uses Scalar::Util::looks_like_number to test for
+    numberness rather than the crappy re-based match.
+
+0.3 2007-05-31
+    Added empty array ref => empty attribute functionality.
+
+0.4 2007-05-31
+    Renamed to HTML::Tiny to avoid name clash with TOMC's module
