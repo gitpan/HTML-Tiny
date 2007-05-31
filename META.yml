@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                HTML-Tiny
-version:             v0.4
+version:             v0.5
 abstract:            Tiny HTML generation utilities
 license:             perl
 generated_by:        ExtUtils::MakeMaker version 6.32
