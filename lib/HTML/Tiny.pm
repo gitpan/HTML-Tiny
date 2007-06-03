@@ -3,9 +3,8 @@ package HTML::Tiny;
 use warnings;
 use strict;
 use Carp;
-use Scalar::Util qw(blessed looks_like_number refaddr);
 
-use version; our $VERSION = qv( '0.6' );
+our $VERSION = '0.7';
 
 BEGIN {
 
@@ -29,6 +28,12 @@ my @DEFAULT_CLOSED = qw( area base br col frame hr img input meta param );
 
 # Tags that get a trailing newline by default
 my @DEFAULT_NEWLINE = qw( html head body div p tr table );
+
+my %DEFAULT_AUTO = (
+    prefix => '',
+    suffix => '',
+    method => 'tag'
+);
 
 my %ENT_MAP = (
     '&' => '&amp;',
@@ -109,8 +114,8 @@ sub _str {
     return join '', @$obj
       if 'ARRAY' eq ref $obj;
     # ...stringify objects...
-    return $obj->as_string
-      if blessed $obj && $obj->can( 'as_string' );
+    my $str = eval { $obj->as_string };
+    return $str unless $@;
     # ...default stringification
     return "$obj";
 }
@@ -222,12 +227,12 @@ sub close {
 }
 
 sub auto_tag {
-    my $self   = shift;
-    my $name   = shift;
-    my $method = $self->{autotag}->{method}->{$name} || 'tag';
-    my $pre    = $self->{autotag}->{prefix}->{$name} || '';
-    my $post   = $self->{autotag}->{suffix}->{$name} || '';
-    my @out    = map { "${pre}${_}${post}" } $self->$method( $name, @_ );
+    my $self = shift;
+    my $name = shift;
+    my ( $method, $pre, $post ) =
+      map { $self->{autotag}->{$_}->{$name} || $DEFAULT_AUTO{$_} }
+      ( 'method', 'prefix', 'suffix' );
+    my @out = map { "${pre}${_}${post}" } $self->$method( $name, @_ );
     return wantarray ? @out : join '', @out;
 }
 
@@ -254,7 +259,7 @@ sub json_encode {
         }
     }
 
-    if ( looks_like_number $obj ) {
+    if ( $obj =~ /^-?\d+(?:[.]\d+)?$/ ) {
         return $obj;
     }
 
@@ -275,7 +280,7 @@ HTML::Tiny - Lightweight, dependency free HTML/XML generation
 
 =head1 VERSION
 
-This document describes HTML::Tiny version 0.6
+This document describes HTML::Tiny version 0.7
 
 =head1 SYNOPSIS
 
