@@ -1,8 +1,9 @@
-use lib qw(t/lib);
-use Test;
+use Test::More tests => 2;
 
-plan 1;
+BEGIN {
+    ok( $] >= 5.004, "Your perl is new enough" );
 
-eval "use HTML::Tiny";
-ok !$@, 'Loaded OK';
+    use_ok( 'HTML::Tiny' );
+}
 
+diag( "Testing HTML::Tiny $HTML::Tiny::VERSION" );
