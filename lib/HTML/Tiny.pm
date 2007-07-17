@@ -4,7 +4,7 @@ use strict;
 use Carp;
 
 use vars qw/$VERSION/;
-$VERSION = '0.11';
+$VERSION = '0.901';
 
 BEGIN {
 
@@ -240,7 +240,7 @@ HTML::Tiny - Lightweight, dependency free HTML/XML generation
 
 =head1 VERSION
 
-This document describes HTML::Tiny version 0.11
+This document describes HTML::Tiny version 0.901
 
 =head1 SYNOPSIS
 
