@@ -1,14 +1,19 @@
---- #YAML:1.0
-name:                HTML-Tiny
-version:             0.902
-abstract:            Lightweight, dependency free HTML/XML generation
-license:             perl
-generated_by:        ExtUtils::MakeMaker version 6.36
-distribution_type:   module
-requires:     
-    Test::More:                    0
-meta-spec:
-    url:     http://module-build.sourceforge.net/META-spec-v1.2.html
-    version: 1.2
+---
+name: HTML-Tiny
+version: 0.903
 author:
-    - Andy Armstrong <andy@hexten.net>
+  - 'Andy Armstrong <andy@hexten.net>'
+abstract: 'Lightweight, dependency free HTML/XML generation'
+license: perl
+resources:
+  license: http://dev.perl.org/licenses/
+requires:
+  Test::More: 0
+provides:
+  HTML::Tiny:
+    file: lib/HTML/Tiny.pm
+    version: 0.903
+generated_by: Module::Build version 0.2808
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.2.html
+  version: 1.2
