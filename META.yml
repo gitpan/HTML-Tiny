@@ -1,6 +1,6 @@
 ---
 name: HTML-Tiny
-version: 0.903
+version: 0.904
 author:
   - 'Andy Armstrong <andy@hexten.net>'
 abstract: 'Lightweight, dependency free HTML/XML generation'
@@ -12,7 +12,7 @@ requires:
 provides:
   HTML::Tiny:
     file: lib/HTML/Tiny.pm
-    version: 0.903
+    version: 0.904
 generated_by: Module::Build version 0.2808
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html
