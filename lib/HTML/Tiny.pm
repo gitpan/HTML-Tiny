@@ -9,12 +9,12 @@ HTML::Tiny - Lightweight, dependency free HTML/XML generation
 
 =head1 VERSION
 
-This document describes HTML::Tiny version 0.904
+This document describes HTML::Tiny version 1.00
 
 =cut
 
 use vars qw/$VERSION/;
-$VERSION = '0.904';
+$VERSION = '1.00';
 
 BEGIN {
 
@@ -449,8 +449,8 @@ sub stringify {
         }
 
         # ...stringify objects...
-        my $str = eval { $obj->as_string };
-        return $str unless $@;
+        my $str;
+        return $str if eval { $str = $obj->as_string; 1 };
     }
 
     # ...default stringification
@@ -515,7 +515,7 @@ are encoded as '%' + their hexadecimal character code.
 
 sub url_encode {
     my $str = $_[0]->stringify( $_[1] );
-    $str =~ s/([^A-Za-z0-9_])/$1 eq ' ' ? '+' : sprintf("%%%02x", ord($1))/eg;
+    $str =~ s/([^A-Za-z0-9_~])/$1 eq ' ' ? '+' : sprintf("%%%02x", ord($1))/eg;
     return $str;
 }
 
@@ -569,28 +569,39 @@ would print:
 
 {
     my %ENT_MAP = (
-        '&' => '&amp;',
-        '<' => '&lt;',
-        '>' => '&gt;',
-        '"' => '&quot;',
-        "'" => '&apos;',
+        '&'   => '&amp;',
+        '<'   => '&lt;',
+        '>'   => '&gt;',
+        '"'   => '&#34;', # shorter than &quot;
+        "'"   => '&#39;', # HTML does not define &apos;
+        "\xA" => '&#10;',
+        "\xD" => '&#13;',
     );
+
+    my $text_special = qr/([<>&'"])/;
+    my $attr_special = qr/([<>&'"\x0A\x0D])/; # FIXME needs tests
 
     sub entity_encode {
         my $str = $_[0]->stringify( $_[1] );
-        $str =~ s/([<>&'"])/$ENT_MAP{$1}/eg;
+        my $char_rx = $_[2] ? $attr_special : $text_special;
+        $str =~ s/$char_rx/$ENT_MAP{$1}/eg;
         return $str;
     }
 }
 
-sub _tag_value {
-    my ( $self, $val ) = @_;
-    return '' if ref $val;
-    return '="' . $self->entity_encode( $val ) . '"';
+sub _attr {
+    my ( $self, $attr, $val ) = @_;
+
+    if ( ref $val ) {
+        return $attr if 1; # FIXME correct condition: !$xml_mode
+        $val = $attr;      # FIXME needs tests
+    }
+
+    my $enc_val = $self->entity_encode( $val, 1 );
+    return qq{$attr="$enc_val"};
 }
 
 sub validate_tag {
-
     # Do nothing. Subclass to throw an error for invalid tags
 }
 
@@ -606,11 +617,12 @@ sub _tag {
     $self->validate_tag( $closed, $name, \%attr );
 
     # Generate markup
-    return "<$name"
-      . join( '',
-        map         { ' ' . $_ . $self->_tag_value( $attr{$_} ) }
-          sort grep { defined $attr{$_} } keys %attr )
-      . ( $closed ? ' />' : '>' );
+    my $tag = join( ' ',
+        "<$name",
+        map { $self->_attr( $_, $attr{$_} ) }
+        sort grep { defined $attr{$_} } keys %attr );
+
+    return $tag . ( $closed ? ' />' : '>' ); # FIXME must be $closed && $xml_mode
 }
 
 {
@@ -736,6 +748,8 @@ L<http://rt.cpan.org>.
 =head1 AUTHOR
 
 Andy Armstrong  C<< <andy@hexten.net> >>
+
+Aristotle Pagaltzis C<< <pagaltzis@gmx.de> >>
 
 =head1 LICENCE AND COPYRIGHT
 

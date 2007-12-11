@@ -16,3 +16,4 @@ t/050-validate_tag.t
 xt/author/pod-coverage.t
 xt/author/pod.t
 META.yml
+SIGNATURE                                Public-key signature (added by MakeMaker)
