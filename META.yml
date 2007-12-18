@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                HTML-Tiny
-version:             1.00
+version:             1.01
 abstract:            Lightweight, dependency free HTML/XML generation
 license:             perl
 author:              
