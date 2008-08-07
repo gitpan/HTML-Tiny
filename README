@@ -1,4 +1,4 @@
-HTML-Tiny version 1.01
+HTML-Tiny version 1.02
 
 INSTALLATION
 
@@ -16,7 +16,7 @@ None.
 
 COPYRIGHT AND LICENCE
 
-Copyright (C) 2007, Andy Armstrong
+Copyright (C) 2008, Andy Armstrong
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

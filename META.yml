@@ -1,11 +1,11 @@
 --- #YAML:1.0
 name:                HTML-Tiny
-version:             1.01
+version:             1.02
 abstract:            Lightweight, dependency free HTML/XML generation
 license:             perl
 author:              
     - Andy Armstrong <andy@hexten.net>
-generated_by:        ExtUtils::MakeMaker version 6.42
+generated_by:        ExtUtils::MakeMaker version 6.44
 distribution_type:   module
 requires:     
     Test::More:                    0
